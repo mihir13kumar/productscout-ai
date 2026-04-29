@@ -1,6 +1,7 @@
 fastapi
 uvicorn
-httpx
+curl_cffi
+brotli
 langchain
 langchain-groq
 langchain-core

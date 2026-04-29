@@ -1,4 +1,4 @@
-import httpx
+from curl_cffi.requests import AsyncSession
 import re
 import logging
 import traceback
@@ -15,47 +15,37 @@ logging.basicConfig(
 )
 logger = logging.getLogger("scraper")
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/122.0.0.0 Safari/537.36"
-    ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-}
-
 
 async def scrape_product(url: str) -> str:
     """
-    Scrapes product page using httpx + BeautifulSoup.
+    Scrapes product page using curl_cffi + BeautifulSoup.
+    curl_cffi impersonates a real browser to bypass anti-bot systems like Akamai.
     """
     logger.info(f"Starting scrape for URL: {url}")
     
     try:
-        async with httpx.AsyncClient(
-            headers=HEADERS,
-            follow_redirects=True,
-            timeout=30.0,
-        ) as client:
-            logger.debug("Sending GET request...")
-            response = await client.get(url)
+        async with AsyncSession() as session:
+            logger.debug("Sending request using curl_cffi (impersonate='chrome124')...")
+            # impersonate="chrome124" handles JA3 fingerprints, headers, and HTTP/2 settings automatically
+            response = await session.get(
+                url, 
+                impersonate="chrome124",
+                timeout=30.0,
+                follow_redirects=True
+            )
+            
             logger.info(f"Response status: {response.status_code}")
-            logger.debug(f"Response headers: {dict(response.headers)}")
-            response.raise_for_status()
+            
+            if response.status_code != 200:
+                logger.error(f"Failed to scrape. Status: {response.status_code}")
+                # Log a bit of the response if it's an error
+                logger.debug(f"Error body: {response.text[:500]}")
+                raise Exception(f"Scraper blocked (Status {response.status_code}). Site might be detecting automation.")
+
             html = response.text
             logger.info(f"HTML received: {len(html)} chars")
-    except httpx.HTTPStatusError as e:
-        logger.error(f"HTTP error {e.response.status_code}: {e}")
-        raise
-    except httpx.RequestError as e:
-        logger.error(f"Request error: {e}")
-        raise
     except Exception as e:
-        logger.error(f"Unexpected error during HTTP request: {e}")
+        logger.error(f"Error during scrape: {e}")
         logger.error(traceback.format_exc())
         raise
 
