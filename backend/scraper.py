@@ -31,7 +31,7 @@ async def scrape_product(url: str) -> str:
                 url, 
                 impersonate="chrome124",
                 timeout=30.0,
-                follow_redirects=True
+                allow_redirects=True
             )
             
             logger.info(f"Response status: {response.status_code}")

@@ -8,7 +8,7 @@ import { Button } from './ui/button';
 
 /* ---------- Typing Indicator ---------- */
 const TypingIndicator = () => (
-  <div className="flex items-start gap-4 max-w-3xl mx-auto px-4 py-3">
+  <div className="flex items-start gap-4 max-w-3xl px-4 py-3 mx-auto w-full">
     <div className="flex-shrink-0 w-8 h-8 rounded-full overflow-hidden border border-border flex items-center justify-center mt-0.5">
       <img src="/logo.png" alt="AI" className="w-full h-full object-cover" />
     </div>
