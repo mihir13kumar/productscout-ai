@@ -22,16 +22,16 @@ const useAppStore = create((setStore, getStore) => ({
     try {
       const allKeys = await keys();
       const chatKeys = allKeys.filter(k => typeof k === 'string' && k.startsWith('chat_'));
-      
+
       const loadedConversations = [];
       for (const key of chatKeys) {
         const chat = await get(key);
         if (chat) loadedConversations.push(chat);
       }
-      
+
       // Sort newest first
       loadedConversations.sort((a, b) => b.updatedAt - a.updatedAt);
-      
+
       setStore({ conversations: loadedConversations });
     } catch (e) {
       console.error("Failed to load conversations from IndexedDB", e);
@@ -54,7 +54,7 @@ const useAppStore = create((setStore, getStore) => ({
 
     try {
       await set(`chat_${state.currentConversationId}`, chatData);
-      
+
       // Update the conversations list in memory
       setStore((prev) => {
         const existing = prev.conversations.filter(c => c.id !== state.currentConversationId);
@@ -105,7 +105,7 @@ const useAppStore = create((setStore, getStore) => ({
       await del(`chat_${id}`);
       setStore((state) => {
         const newConvos = state.conversations.filter(c => c.id !== id);
-        
+
         // If we deleted the active one, switch to new chat
         if (state.currentConversationId === id) {
           return {
@@ -137,16 +137,16 @@ const useAppStore = create((setStore, getStore) => ({
     setStore({ url });
     // Don't auto save just for typing URL
   },
-  
+
   setIsScraping: (isScraping) => setStore({ isScraping }),
-  
+
   addScrapingLog: (log) => {
-    setStore((state) => ({ 
-      scrapingLogs: [...state.scrapingLogs, { id: generateId(), text: log, time: new Date() }] 
+    setStore((state) => ({
+      scrapingLogs: [...state.scrapingLogs, { id: generateId(), text: log, time: new Date() }]
     }));
     getStore().saveCurrentConversation();
   },
-  
+
   clearScrapingLogs: () => {
     setStore({ scrapingLogs: [] });
     getStore().saveCurrentConversation();
@@ -165,7 +165,7 @@ const useAppStore = create((setStore, getStore) => ({
     setStore((state) => ({ messages: [...state.messages, message] }));
     getStore().saveCurrentConversation();
   },
-  
+
   updateLastMessage: (chunk) => {
     setStore((state) => {
       const newMessages = [...state.messages];
@@ -176,7 +176,7 @@ const useAppStore = create((setStore, getStore) => ({
           content: newMessages[lastMsgIndex].content + chunk
         };
       } else {
-          newMessages.push({ role: 'assistant', content: chunk, id: generateId() });
+        newMessages.push({ role: 'assistant', content: chunk, id: generateId() });
       }
       return { messages: newMessages };
     });
@@ -185,7 +185,7 @@ const useAppStore = create((setStore, getStore) => ({
     // or just let it save.
     getStore().saveCurrentConversation();
   },
-  
+
   clearMessages: () => {
     setStore({ messages: [] });
     getStore().saveCurrentConversation();

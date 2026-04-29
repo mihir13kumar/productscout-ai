@@ -1,10 +1,12 @@
-# ProductScout AI 🚀
+<p align="center">
+  <img src="frontend/public/screenshot-1.png" width="100%" alt="ProductScout AI Screenshot">
+</p>
+
+# <img src="frontend/public/logo.png" width="40" align="center"> ProductScout AI
 
 **ProductScout AI** is a premium, high-performance e-commerce research assistant. It allows users to paste any product URL, instantly scrape its contents, and engage in a deep AI-powered conversation to analyze features, pricing, and reviews.
 
-![ProductScout AI Logo](/frontend/public/logo.png)
-
-## ✨ Features
+## Features
 
 - **Real-time Web Scraping**: Instantly extracts product metadata, pricing, and specifications from major e-commerce platforms.
 - **AI Analysis**: Powered by **LangChain** and **Groq**, providing lightning-fast, intelligent responses to any product-related query.
@@ -16,7 +18,7 @@
 - **Premium Aesthetics**: Built with **Tailwind CSS v4**, **Shadcn UI**, and **Geist Variable** typography for a high-end feel.
 - **Responsive Design**: Fully optimized for desktop and mobile experience.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: React 19 (Vite)
@@ -33,7 +35,7 @@
 - **Scraping**: BeautifulSoup4 & HTTPX
 - **Server**: Uvicorn
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
@@ -48,7 +50,10 @@
 2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
    ```
 3. Install dependencies:
    ```bash
@@ -77,10 +82,6 @@
    npm run dev
    ```
 
-## 📸 Screenshots
-
-![ProductScout AI Interface](/frontend/public/screenshot-1.png)
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
